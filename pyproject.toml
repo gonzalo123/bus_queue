@@ -4,7 +4,6 @@ version = "0.5.0"
 description = ""
 authors = ["Gonzalo Ayuso <gonzalo123@gmail.com>"]
 readme = "README.md"
-bus-queue = {version = "*", extras = ["sync"]}
 packages = [{ include = "bus_queue", from = "src" }]
 
 

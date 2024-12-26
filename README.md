@@ -415,12 +415,12 @@ And that's all. The library can be installed with poetry in both versions: async
 
 For the sync version:
 ```bash
-poetry add bus-queue --extras "sync"
-pip install bus-queue[sync]
+poetry add bus_queue --extras "sync"
+pip install bus_queue[sync]
 ```
 and for the async version:
 ```bash
-poetry add bus-queue --extras "async"
-pip install bus-queue[async]
+poetry add bus_queue --extras "async"
+pip install bus_queue[async]
 ```
 
