@@ -5,6 +5,7 @@ Today we're going to build an event bus with Python. It's an event bus according
 That's the on memory version:
 
 ```python
+import logging
 
 from bus_queue.backend.memory.bus import MemoryEventBus as Bus
 from bus_queue import EventBus
@@ -411,6 +412,7 @@ class AsyncRabbitEventBus(AsyncBackend):
 ```
 
 And that's all. The library can be installed with poetry in both versions: async and sync. You can use pip or poetry to install the library. 
+
 ```bash
 
 For the sync version:
@@ -418,7 +420,9 @@ For the sync version:
 poetry add bus_queue --extras "sync"
 pip install bus_queue[sync]
 ```
+
 and for the async version:
+
 ```bash
 poetry add bus_queue --extras "async"
 pip install bus_queue[async]
