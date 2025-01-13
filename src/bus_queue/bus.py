@@ -2,6 +2,8 @@ import json
 from abc import ABC, abstractmethod
 from typing import Callable, Any
 
+from jsonencoder import DefaultEncoder
+
 
 class Backend(ABC):
     @abstractmethod
@@ -26,7 +28,7 @@ class EventBus:
         self.backend = backend
 
     def publish(self, topic: str, message: Any) -> None:
-        self.backend.publish(topic, json.dumps(message))
+        self.backend.publish(topic, json.dumps(message, cls=DefaultEncoder))
 
     def subscribe(self, topic: str, callback: Callable[[str, Any], None]) -> None:
         def json_callback(t: str, message: str):
@@ -36,7 +38,7 @@ class EventBus:
         self.backend.subscribe(topic, json_callback)
 
     def broadcast(self, topic: str, message: Any) -> None:
-        self.backend.broadcast(topic, json.dumps(message))
+        self.backend.broadcast(topic, json.dumps(message, cls=DefaultEncoder))
 
     def wait(self):
         self.backend.wait()

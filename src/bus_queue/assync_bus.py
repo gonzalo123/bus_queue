@@ -2,6 +2,8 @@ import json
 from abc import ABC, abstractmethod
 from typing import Callable, Any, Awaitable
 
+from jsonencoder import DefaultEncoder
+
 
 class AsyncBackend(ABC):
     @abstractmethod
@@ -26,7 +28,7 @@ class AsyncEventBus:
         self.backend = backend
 
     async def publish(self, topic: str, message: Any) -> None:
-        await self.backend.publish(topic, json.dumps(message))
+        await self.backend.publish(topic, json.dumps(message, cls=DefaultEncoder))
 
     async def subscribe(self, topic: str, callback: Callable[[str, Any], Awaitable[None]]):
         async def json_callback(t: str, message: str):
@@ -36,7 +38,7 @@ class AsyncEventBus:
         await self.backend.subscribe(topic, json_callback)
 
     async def broadcast(self, topic: str, message: Any) -> None:
-        await self.backend.broadcast(topic, json.dumps(message))
+        await self.backend.broadcast(topic, json.dumps(message, cls=DefaultEncoder))
 
     async def wait(self):
         await self.backend.wait()
