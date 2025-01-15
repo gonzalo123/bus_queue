@@ -25,14 +25,14 @@ class RabbitEventBus(Backend):
         self.channel = self.connection.channel()
 
     def broadcast(self, topic: str, payload: Any):
-        if self.channel is None:
+        if self.channel is None or self.channel.is_closed:
             self.connect()
         exchange = get_broadcast_exchange_from_topic(topic)
         self.channel.exchange_declare(exchange=exchange, exchange_type='fanout')
         self.channel.basic_publish(exchange=exchange, routing_key='', body=payload.encode())
 
     def publish(self, topic: str, payload: Any):
-        if self.channel is None:
+        if self.channel is None or self.channel.is_closed:
             self.connect()
         self.channel.basic_publish(exchange='', routing_key=topic, body=payload.encode())
 
@@ -41,7 +41,7 @@ class RabbitEventBus(Backend):
             self.subscribers[topic] = []
         self.subscribers[topic].append(handler)
 
-        if self.channel is None:
+        if self.channel is None or self.channel.is_closed:
             self.connect()
 
         self.channel.queue_declare(queue=topic, auto_delete=True)
@@ -71,7 +71,7 @@ class RabbitEventBus(Backend):
         self.channel.basic_consume(queue=queue_name, on_message_callback=on_message, auto_ack=False)
 
     def wait(self):
-        if self.channel is None:
+        if self.channel is None or self.channel.is_closed:
             self.connect()
         self.channel.basic_qos(prefetch_count=1)
         self.channel.start_consuming()
