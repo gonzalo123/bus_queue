@@ -25,17 +25,14 @@ class RabbitEventBus(Backend):
         self.channel = self.connection.channel()
 
     def broadcast(self, topic: str, payload: Any):
-        if self.channel is None or self.channel.is_closed:
-            self.connect()
+        self.connect()
         exchange = get_broadcast_exchange_from_topic(topic)
         self.channel.exchange_declare(exchange=exchange, exchange_type='fanout')
         self.channel.basic_publish(exchange=exchange, routing_key='', body=payload.encode())
 
     def publish(self, topic: str, payload: Any):
         logger.info(f"Publishing to {topic}")
-        if self.channel is None or self.channel.is_closed:
-            logger.info("Connecting")
-            self.connect()
+        self.connect()
         logger.info("Connected")
         self.channel.basic_publish(exchange='', routing_key=topic, body=payload.encode())
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bus_queue"
-version = "0.5.3"
+version = "0.5.4"
 description = ""
 authors = ["Gonzalo Ayuso <gonzalo123@gmail.com>"]
 readme = "README.md"
