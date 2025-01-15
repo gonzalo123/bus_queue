@@ -32,8 +32,11 @@ class RabbitEventBus(Backend):
         self.channel.basic_publish(exchange=exchange, routing_key='', body=payload.encode())
 
     def publish(self, topic: str, payload: Any):
+        logger.info(f"Publishing to {topic}")
         if self.channel is None or self.channel.is_closed:
+            logger.info("Connecting")
             self.connect()
+        logger.info("Connected")
         self.channel.basic_publish(exchange='', routing_key=topic, body=payload.encode())
 
     def subscribe(self, topic: str, handler: Callable[[str, Any], None]):
